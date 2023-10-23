@@ -17,9 +17,6 @@ public class ProyectoEstructurasOto2023 extends JFrame{
     //ligas---------------------------------------------------------------------
     private JMenu ligas;
     private JMenuItem ligarNodos;
-    private ButtonGroup grupoBotones = new ButtonGroup();
-    private JRadioButton dirigido = new JRadioButton();
-    private JRadioButton noDirigido = new JRadioButton();
     //grafos dirigidos----------------------------------------------------------
     private JMenu gDirigidos;
     private JMenuItem algoDijk, algoFloyd;
@@ -45,9 +42,6 @@ public class ProyectoEstructurasOto2023 extends JFrame{
         panel = new PanelMapa();
         panel.setLayout(null);
         this.getContentPane().add(panel);
-        grupoBotones = new ButtonGroup();
-        dirigido = new JRadioButton("Dirigida");
-        noDirigido = new JRadioButton("No dirigida");
         barraMenu = new JMenuBar();
         //dentro de la barra----------------------------------------------------
         archivo = new JMenu("Archivos");
@@ -70,27 +64,8 @@ public class ProyectoEstructurasOto2023 extends JFrame{
         matriz = new JMenu("Matriz");
             mostrarMatriz = new JMenuItem("Mostrar matriz");
         //posicion objetos------------------------------------------------------
-        barraMenu.setBounds(360, 20, 480, 20);
-        dirigido.setBounds(200, 20, 100, 20);
-        noDirigido.setBounds(900, 20, 100, 20);
+        barraMenu.setBounds(0, 0, getWidth(), 20);
         //agregar objetos-------------------------------------------------------
-        panel.add(dirigido);
-            grupoBotones.add(dirigido);
-            dirigido.addActionListener(new ActionListener(){
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    panel.lineasGrafoSwitch();
-                }
-            });
-        panel.add(noDirigido);
-            noDirigido.setSelected(true);
-            grupoBotones.add(noDirigido);
-            noDirigido.addActionListener(new ActionListener(){
-                @Override
-                public void actionPerformed(ActionEvent e){
-                    panel.lineasGrafoSwitch();
-                }
-            });
         panel.add(barraMenu);
         barraMenu.add(archivo);
             archivo.add(abrir);

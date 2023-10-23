@@ -15,7 +15,7 @@ public class Floyd extends JFrame {
     private int seleccion1, seleccion2;
     private JPanel panel;
     private final  ArrayList<Matriz> matriz;
-    static int I = 99999;static int n;
+    private static final int I = 99999;private static int n;
     Floyd(ArrayList<Matriz> matriz){
         this.matriz = new ArrayList<Matriz>(matriz);
         n = matriz.size();
@@ -54,10 +54,10 @@ public class Floyd extends JFrame {
                 seleccion2 = (int) comboBox2.getSelectedItem()-1;
                 
                 if (seleccion1 == seleccion2) {
-                    JOptionPane.showInputDialog("¡No puedes seleccionar números iguales!");
+                    JOptionPane.showMessageDialog(null,"¡No puedes seleccionar números iguales!");
                 } else {
-                    JOptionPane.showInputDialog("Números seleccionados: " + seleccion1 + " y " + seleccion2);
                     algoritmoFloyd(seleccion1, seleccion2);
+                    algoritmoLarios(seleccion1, seleccion2);
                 }
             }
         });
@@ -67,7 +67,9 @@ public class Floyd extends JFrame {
         panel.add(comboBox1);
         panel.add(comboBox2);
     }
+    
     private void algoritmoFloyd(int origen, int destino){
+        long startTime = System.nanoTime(); // Registro del tiempo inicial
         int[][] dist = new int[n][n];
         int i, j, k;
         for(i=0;i<n;i++){
@@ -104,8 +106,54 @@ public class Floyd extends JFrame {
 		}
             }
 	}
+        long endTime = System.nanoTime(); // Registro del tiempo final
+        long executionTime = endTime - startTime; // Cálculo del tiempo de ejecución en milisegundos
+        System.out.println("Tiempo de ejecución del algoritmo Floyd: " + executionTime + " ns");
+    }
+    private void algoritmoLarios(int origen, int destino){
+        long startTime = System.nanoTime(); // Registro del tiempo inicial
+        int[][] dist = new int[n][n];
+        int i, j, k;
+        for(i=0;i<n;i++){
+            for(j=0;j<n;j++){
+                int valor = distanciaAB(i, j);
+                switch(valor){
+                    case -1 -> {
+                        dist[i][j]= I;
+                    }
+                    case 0 -> {
+                        dist[i][j]=valor;
+                    }
+                    default -> {
+                        dist[i][j]=valor;
+                    }
+                }
+            }
+        }
+	int[][] predMatrix = new int[n][n];
+	for (i = 0; i < n; i++) {
+            for (j = 0; j < n; j++){
+		if (i != j){
+                    predMatrix[i][j] = j + 1;
+                }
+            }
+        }
+	for (k = 0; k < n; k++) {
+            for (j = 0; j < n; j++) {
+		for (i = 0; i < n; i++) {
+                    if (dist[i][k] + dist[k][j] < dist[i][j]) {
+			dist[i][j] = dist[i][k] + dist[k][j];
+			predMatrix[i][j] = predMatrix[i][k];
+                    }
+		}
+            }
+	}
+        long endTime = System.nanoTime(); // Registro del tiempo final
+        long executionTime = endTime - startTime; // Cálculo del tiempo de ejecución en milisegundos
+        System.out.println("Tiempo de ejecución del algoritmo Larios: " + executionTime + " ns");
         imprimirEspecifico(origen, destino, dist, predMatrix);
     }
+    //--------------------------------------------------------------------------
     private void imprimirResultado(int[][] dist, int[][] pred) {
         textoMatriz.append("\n");
         for (int i = 0; i < pred.length; i++) {

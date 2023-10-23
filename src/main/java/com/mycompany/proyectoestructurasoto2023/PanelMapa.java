@@ -7,7 +7,8 @@ import java.util.*;
         
 public class PanelMapa extends JPanel{
     private int x, y, x2, y2;
-    private boolean dirigido;
+    private boolean dirigido = false;//empieza no dirigido
+    private boolean distPersonalizadas = false;
     private int conta = 1, estado = 1;
     private ArrayList<Nodo>nodos;
     private ArrayList<Linea>lineas;
@@ -33,10 +34,20 @@ public class PanelMapa extends JPanel{
                 if (e.getKeyChar()=='l'){//ligar nodos
                     System.out.println("tecla l presionada");
                     estado=2;
+                    dirigido = false;
+                }
+                if (e.getKeyChar()=='d'){//ligar dirigido
+                    System.out.println("tecla d presionada");
+                    estado=2;
+                    dirigido = true;
                 }
                 if (e.getKeyChar()=='m'){//mover nodos 
                     System.out.println("tecla m presionada");
                     estado=3;
+                }
+                if (e.getKeyChar()=='p'){//distancias propias 
+                    System.out.println("tecla p presionada");
+                    distPersonalizadas = !(distPersonalizadas);
                 }
             }
             @Override
@@ -153,10 +164,10 @@ public class PanelMapa extends JPanel{
         
         //for de lineas y nodos-------------------------------------------------
         for(int i=0; i<lineas.size(); i++){//lineas
+            g.setColor(Color.BLACK);
             int x1 = lineas.get(i).getX1();int y1 = lineas.get(i).getY1();
             int x22 = lineas.get(i).getX2();int y22 = lineas.get(i).getY2();
-            g.drawLine(x1,y1,x22,y22);
-            g.drawString(""+lineas.get(i).getDistancia(), (x1+x22)/2, (y1+y22)/2);
+            g.drawLine(x1,y1,x22,y22);            
             if(lineas.get(i).getDirigido()){
                 double angle = Math.atan2(y22 - y1, x22 - x1);
                 int arrowLength = 15;
@@ -170,6 +181,8 @@ public class PanelMapa extends JPanel{
                 arrow.addPoint(x4, y4);
                 g.fillPolygon(arrow);
             }
+            g.setColor(Color.BLUE);
+            g.drawString(""+lineas.get(i).getDistancia(), (x1+x22)/2, (y1+y22)/2);
         }
         for(int i=0; i<nodos.size(); i++){//puntos
             //punto
@@ -188,6 +201,12 @@ public class PanelMapa extends JPanel{
         x2 = nodos.get(n2).getX();
         y2 = nodos.get(n2).getY();
         lin.setDistancia((int) sqrt((x2-x)*(x2-x)+(y2-y)*(y2-y)));
+        if (distPersonalizadas){
+            try{
+                int distancia = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la distancia deseada"));
+                lin.setDistancia(distancia);
+            }catch(java.lang.NumberFormatException ex){}
+        }
         lin.setX1(x);
         lin.setY1(y);
         lin.setX2(x2);
@@ -195,9 +214,6 @@ public class PanelMapa extends JPanel{
         lin.setDirigido(dirigido);
         lineas.add(lin);
         repaint();
-    }
-    public void lineasGrafoSwitch(){
-        dirigido = dirigido != true;
     }
     //==========================================================================
     public void Matrix(){
