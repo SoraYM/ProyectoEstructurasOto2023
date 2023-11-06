@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import static java.lang.Math.*;
 import java.util.*;
+import java.io.*;
         
 public class PanelMapa extends JPanel{
     private int x, y, x2, y2;
@@ -13,6 +14,7 @@ public class PanelMapa extends JPanel{
     private ArrayList<Nodo>nodos;
     private ArrayList<Linea>lineas;
     private ArrayList<Matriz>matriz;
+    public ArrayList<Integer>camino;
     //--------------------------------------------------------------------------
     PanelMapa(){
         setBackground(Color.white);
@@ -20,6 +22,7 @@ public class PanelMapa extends JPanel{
         nodos = new ArrayList<Nodo>();
         lineas = new ArrayList<Linea>();
         matriz = new ArrayList<Matriz>();
+        camino = new ArrayList<Integer>();
         addKeyListener(new KeyAdapter(){//teclas--------------------------------
             @Override
             public void keyTyped(KeyEvent e) {
@@ -153,7 +156,7 @@ public class PanelMapa extends JPanel{
             }
         });
     }
-    //figuras y demas-----------------------------------------------------------
+    //figuras y demas===========================================================
     @Override public void paintComponent(Graphics g){
         super.paintComponent(g);
         //imagen----------------------------------------------------------------
@@ -167,7 +170,28 @@ public class PanelMapa extends JPanel{
             g.setColor(Color.BLACK);
             int x1 = lineas.get(i).getX1();int y1 = lineas.get(i).getY1();
             int x22 = lineas.get(i).getX2();int y22 = lineas.get(i).getY2();
-            g.drawLine(x1,y1,x22,y22);            
+            if(!camino.isEmpty()){
+                ArrayList<Integer>revision = new ArrayList<>();
+                boolean pintar = false;
+                revision.addAll(camino);
+                for(int j = 0;j<revision.size();j++){
+                    if((revision.size()-j) >=2){
+                        if(((x1==nodos.get(revision.get(j)).getX()&&y1==nodos.get(revision.get(j)).getY()) && (x22==nodos.get(revision.get(j+1)).getX()&&y22==nodos.get(revision.get(j+1)).getY()))
+                        ||((x22==nodos.get(revision.get(j)).getX()&&y22==nodos.get(revision.get(j)).getY()) && (x1==nodos.get(revision.get(j+1)).getX()&&y1==nodos.get(revision.get(j+1)).getY()))){
+                            pintar = true;
+                        }
+                    }
+                }if(pintar){
+                    g.setColor(Color.RED);
+                    g.drawLine(x1,y1,x22,y22);
+                }else{
+                    g.setColor(Color.BLACK);
+                    g.drawLine(x1,y1,x22,y22); 
+                }
+            }else{
+                g.setColor(Color.BLACK);
+                g.drawLine(x1,y1,x22,y22); 
+            }      
             if(lineas.get(i).getDirigido()){
                 double angle = Math.atan2(y22 - y1, x22 - x1);
                 int arrowLength = 15;
@@ -183,7 +207,7 @@ public class PanelMapa extends JPanel{
             }
             g.setColor(Color.BLUE);
             g.drawString(""+lineas.get(i).getDistancia(), (x1+x22)/2, (y1+y22)/2);
-        }
+        }camino.clear();
         for(int i=0; i<nodos.size(); i++){//puntos
             //punto
             g.setColor(Color.BLACK);
@@ -193,7 +217,7 @@ public class PanelMapa extends JPanel{
             g.drawString(nodos.get(i).getNum(), nodos.get(i).getXn(), nodos.get(i).getYn());
         }
     }
-    //funciones varias----------------------------------------------------------
+    //funciones varias==========================================================
     public void creaLiga(int n1, int n2){
         Linea lin = new Linea();
         x = nodos.get(n1).getX();
@@ -213,6 +237,62 @@ public class PanelMapa extends JPanel{
         lin.setY2(y2);
         lin.setDirigido(dirigido);
         lineas.add(lin);
+        repaint();
+    }
+    public void guardarGrafo(){
+        String archivo = JOptionPane.showInputDialog("Archivo");
+        try {
+            FileOutputStream fileOut = new FileOutputStream(archivo+"Nodo.ser");
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            objectOut.writeObject(nodos);
+            objectOut.close();
+            fileOut.close();
+            System.out.println("Nodos guardados con éxito.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            FileOutputStream fileOut = new FileOutputStream(archivo+"Linea.ser");
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            objectOut.writeObject(lineas);
+            objectOut.close();
+            fileOut.close();
+            System.out.println("Lineas guardadas con éxito.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void cargarGrafo(){
+        String archivo = JOptionPane.showInputDialog("Archivo");
+        try {
+            FileInputStream fileIn = new FileInputStream(archivo+"Nodo.ser");
+            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+            nodos = (ArrayList<Nodo>) objectIn.readObject();
+            objectIn.close();
+            fileIn.close();
+            
+            System.out.println("ArrayList de nodos cargado con éxito:");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+                FileInputStream fileIn = new FileInputStream(archivo+"Linea.ser");
+            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+            lineas = (ArrayList<Linea>) objectIn.readObject();
+            objectIn.close();
+            fileIn.close();
+            
+            System.out.println("ArrayList de lineas cargado con éxito:");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        repaint();
+        conta=nodos.size()+1;
+    }
+    public void cerrarGrafo(){
+        conta=1;
+        nodos.clear();
+        lineas.clear();
         repaint();
     }
     //==========================================================================
@@ -251,8 +331,7 @@ public class PanelMapa extends JPanel{
         matriz.clear();
         ventana.setVisible(true);
     }
-    public void dijkstraDatos(){
-        
+    public void dijkstraDatos(){        
         int tamaño = nodos.size();
         for (int i = 0; i < tamaño; i++){
             Matriz mat = new Matriz();
@@ -282,7 +361,7 @@ public class PanelMapa extends JPanel{
             }
             matriz.add(mat);
         }
-        Dijkstra ventana = new Dijkstra(matriz);
+        Dijkstra ventana = new Dijkstra(matriz, this);
         matriz.clear();
         ventana.setVisible(true);
     }
@@ -317,7 +396,7 @@ public class PanelMapa extends JPanel{
             }
             matriz.add(mat);
         }
-        Floyd ventana = new Floyd(matriz);
+        Floyd ventana = new Floyd(matriz, this);
         matriz.clear();
         ventana.setVisible(true);
     }
