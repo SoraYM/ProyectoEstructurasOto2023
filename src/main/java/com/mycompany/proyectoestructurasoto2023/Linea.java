@@ -1,15 +1,10 @@
 package com.mycompany.proyectoestructurasoto2023;
-
-/**
- *
- * @author yesu7
- */
-public class Linea {
+import java.io.Serializable;
+public class Linea implements Serializable{
     private int x1, x2, y1, y2;
     private int distancia;
     private boolean dirigido;
-    Linea(){
-        
+    Linea(){      
     }
     /**
      * @return the x1

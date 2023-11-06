@@ -69,8 +69,26 @@ public class ProyectoEstructurasOto2023 extends JFrame{
         panel.add(barraMenu);
         barraMenu.add(archivo);
             archivo.add(abrir);
+            abrir.addActionListener(new ActionListener(){
+                @Override
+                public void actionPerformed(ActionEvent e){
+                    panel.cargarGrafo();
+                }  
+            });
             archivo.add(guardar);
+            guardar.addActionListener(new ActionListener(){
+                @Override
+                public void actionPerformed(ActionEvent e){
+                    panel.guardarGrafo();
+                }  
+            });
             archivo.add(cerrar);
+            cerrar.addActionListener(new ActionListener(){
+                @Override
+                public void actionPerformed(ActionEvent e){
+                    panel.cerrarGrafo();
+                }  
+            });
         barraMenu.add(ligas);
             ligas.add(ligarNodos);
             ligarNodos.addActionListener(new ActionListener(){//metodo crear lineas en menu con botones
