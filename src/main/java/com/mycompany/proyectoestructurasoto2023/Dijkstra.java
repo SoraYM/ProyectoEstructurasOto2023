@@ -14,13 +14,15 @@ public class Dijkstra extends JFrame {
     private int seleccion1, seleccion2;
     private JPanel panel;
     private final ArrayList<Matriz> matriz;
+    private PanelMapa mapa;
     private static final int I = 99999; private static int n;
     private int[] dist;
     private boolean[] visi;
     private int[] predecessors;
 
-    public Dijkstra(ArrayList<Matriz> matriz) {
+    Dijkstra(ArrayList<Matriz> matriz, PanelMapa mapa) {
         this.matriz = new ArrayList<>(matriz);
+        this.mapa = mapa;
         n = matriz.size();
         this.setSize(500, 200);
         this.setLocation(100, 150);
@@ -137,14 +139,17 @@ public class Dijkstra extends JFrame {
         }
     }
     private void imprimirEspecifico(int origen, int destino, int distanciaMinima, List<Integer> caminoMasCorto){
+        mapa.camino.add(origen);
         int u = origen + 1;
         int v = destino + 1;
         String path = String.format("%d -> %d    %2d     %s", u, v, distanciaMinima, caminoMasCorto.get(0)+1);
         for(int i=1;i<caminoMasCorto.size();i++){
+            mapa.camino.add(caminoMasCorto.get(i));
             u = caminoMasCorto.get(i)+1;    
             path += " -> " + u;
         }
         textoMatriz.append(path+"\n");
+        repaint();
     }
     private List<Integer> obtenerCamino(int source, int destination) {
         List<Integer> path = new ArrayList<>();

@@ -1,12 +1,11 @@
 package com.mycompany.proyectoestructurasoto2023;
-public class Nodo {
+import java.io.Serializable;
+public class Nodo implements Serializable{
     private int x,y,w,h;
     private String num;
     private int xn,yn;
-    Nodo(){
-        
+    Nodo(){        
     }
-
     /**
      * @return the x
      */
