@@ -15,11 +15,9 @@ public class Floyd extends JFrame {
     private int seleccion1, seleccion2;
     private JPanel panel;
     private final  ArrayList<Matriz> matriz;
-    private PanelMapa mapa;
     private static final int I = 99999;private static int n;
-    Floyd(ArrayList<Matriz> matriz, PanelMapa mapa){
+    Floyd(ArrayList<Matriz> matriz){
         this.matriz = new ArrayList<Matriz>(matriz);
-        this.mapa = mapa;
         n = matriz.size();
         this.setSize(500,200);//tamaño
         this.setLocation(100, 150);
@@ -69,6 +67,7 @@ public class Floyd extends JFrame {
         panel.add(comboBox1);
         panel.add(comboBox2);
     }
+    
     private void algoritmoFloyd(int origen, int destino){
         long startTime = System.nanoTime(); // Registro del tiempo inicial
         int[][] dist = new int[n][n];
@@ -173,17 +172,14 @@ public class Floyd extends JFrame {
         }
     }
     private void imprimirEspecifico(int origen, int destino, int[][] dist, int[][] predMatrix){
-        mapa.camino.add(origen);
         int u = origen + 1;
         int v = destino + 1;
         String path = String.format("%d -> %d    %2d     %s", u, v, (int) dist[origen][destino], u);
         do {
             u = predMatrix[u - 1][v - 1];
-            mapa.camino.add(u-1);
             path += " -> " + u;
         } while (u != v);
         textoMatriz.append(path+"\n");
-        mapa.repaint();
     }
     private int distanciaAB(int a, int b){
         int valor;
