@@ -183,6 +183,7 @@ public class PanelMapa extends JPanel{
                     }
                 }if(pintar){
                     g.setColor(Color.RED);
+                    
                     g.drawLine(x1,y1,x22,y22);
                 }else{
                     g.setColor(Color.BLACK);
@@ -248,8 +249,7 @@ public class PanelMapa extends JPanel{
             objectOut.close();
             fileOut.close();
             System.out.println("Nodos guardados con éxito.");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
         }
         try {
             FileOutputStream fileOut = new FileOutputStream(archivo+"Linea.ser");
@@ -258,8 +258,7 @@ public class PanelMapa extends JPanel{
             objectOut.close();
             fileOut.close();
             System.out.println("Lineas guardadas con éxito.");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
         }
     }
     public void cargarGrafo(){
@@ -272,19 +271,17 @@ public class PanelMapa extends JPanel{
             fileIn.close();
             
             System.out.println("ArrayList de nodos cargado con éxito:");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException | ClassNotFoundException e) {
         }
         try {
-                FileInputStream fileIn = new FileInputStream(archivo+"Linea.ser");
+            FileInputStream fileIn = new FileInputStream(archivo+"Linea.ser");
             ObjectInputStream objectIn = new ObjectInputStream(fileIn);
             lineas = (ArrayList<Linea>) objectIn.readObject();
             objectIn.close();
             fileIn.close();
             
             System.out.println("ArrayList de lineas cargado con éxito:");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException | ClassNotFoundException e) {
         }
         repaint();
         conta=nodos.size()+1;
@@ -331,7 +328,7 @@ public class PanelMapa extends JPanel{
         matriz.clear();
         ventana.setVisible(true);
     }
-    public void dijkstraDatos(){        
+    public void dijkstraDatos(){
         int tamaño = nodos.size();
         for (int i = 0; i < tamaño; i++){
             Matriz mat = new Matriz();
@@ -366,7 +363,73 @@ public class PanelMapa extends JPanel{
         ventana.setVisible(true);
     }
     public void floydDatos(){
-        
+        int tamaño = nodos.size();
+        for (int i = 0; i < tamaño; i++){
+            Matriz mat = new Matriz();
+            mat.setNodo(i);//Nodo
+            for(int k=0;k<lineas.size();k++){
+                if(lineas.get(k).getX1()==nodos.get(i).getX() && lineas.get(k).getY1()==nodos.get(i).getY()){                    
+                    for(int j=0;j<tamaño;j++){
+                        if(lineas.get(k).getX2()==nodos.get(j).getX() && lineas.get(k).getY2()==nodos.get(j).getY()){
+                            mat.setNodoAs(j);
+                            mat.setValor(lineas.get(k).getDistancia());
+                        }
+                    }
+                }if(lineas.get(k).getX2()==nodos.get(i).getX() && lineas.get(k).getY2()==nodos.get(i).getY()){
+                    
+                    for(int j=0;j<tamaño;j++){
+                        if(lineas.get(k).getX1()==nodos.get(j).getX() && lineas.get(k).getY1()==nodos.get(j).getY()){
+                            mat.setNodoAs(j);
+                            if(lineas.get(k).getDirigido()){
+                                mat.setValor(-1);
+                            }else{
+                                mat.setValor(lineas.get(k).getDistancia());
+                            }
+                        }
+                    }
+                }       
+            }
+            matriz.add(mat);
+        }
+        Floyd ventana = new Floyd(matriz, this);
+        matriz.clear();
+        ventana.setVisible(true);
+    }
+    public void exentricidadDatos(){
+        int tamaño = nodos.size();
+        for (int i = 0; i < tamaño; i++){
+            Matriz mat = new Matriz();
+            mat.setNodo(i);//Nodo
+            for(int k=0;k<lineas.size();k++){
+                if(lineas.get(k).getX1()==nodos.get(i).getX() && lineas.get(k).getY1()==nodos.get(i).getY()){
+                    
+                    for(int j=0;j<tamaño;j++){
+                        if(lineas.get(k).getX2()==nodos.get(j).getX() && lineas.get(k).getY2()==nodos.get(j).getY()){
+                            mat.setNodoAs(j);
+                            mat.setValor(lineas.get(k).getDistancia());
+                        }
+                    }
+                }if(lineas.get(k).getX2()==nodos.get(i).getX() && lineas.get(k).getY2()==nodos.get(i).getY()){
+                    
+                    for(int j=0;j<tamaño;j++){
+                        if(lineas.get(k).getX1()==nodos.get(j).getX() && lineas.get(k).getY1()==nodos.get(j).getY()){
+                            mat.setNodoAs(j);
+                            if(lineas.get(k).getDirigido()){
+                                mat.setValor(-1);
+                            }else{
+                                mat.setValor(lineas.get(k).getDistancia());
+                            }
+                        }
+                    }
+                }       
+            }
+            matriz.add(mat);
+        }
+        Excentricidad ventana = new Excentricidad(matriz, this);
+        matriz.clear();
+        ventana.setVisible(true);
+    }
+    public void bppDatos(){
         int tamaño = nodos.size();
         for (int i = 0; i < tamaño; i++){
             Matriz mat = new Matriz();
@@ -399,6 +462,77 @@ public class PanelMapa extends JPanel{
         Floyd ventana = new Floyd(matriz, this);
         matriz.clear();
         ventana.setVisible(true);
+    }
+    public void bpaDatos(){
+        int tamaño = nodos.size();
+        for (int i = 0; i < tamaño; i++){
+            Matriz mat = new Matriz();
+            mat.setNodo(i);//Nodo
+            for(int k=0;k<lineas.size();k++){
+                if(lineas.get(k).getX1()==nodos.get(i).getX() && lineas.get(k).getY1()==nodos.get(i).getY()){
+                    
+                    for(int j=0;j<tamaño;j++){
+                        if(lineas.get(k).getX2()==nodos.get(j).getX() && lineas.get(k).getY2()==nodos.get(j).getY()){
+                            mat.setNodoAs(j);
+                            mat.setValor(lineas.get(k).getDistancia());
+                        }
+                    }
+                }if(lineas.get(k).getX2()==nodos.get(i).getX() && lineas.get(k).getY2()==nodos.get(i).getY()){
+                    
+                    for(int j=0;j<tamaño;j++){
+                        if(lineas.get(k).getX1()==nodos.get(j).getX() && lineas.get(k).getY1()==nodos.get(j).getY()){
+                            mat.setNodoAs(j);
+                            if(lineas.get(k).getDirigido()){
+                                mat.setValor(-1);
+                            }else{
+                                mat.setValor(lineas.get(k).getDistancia());
+                            }
+                        }
+                    }
+                }       
+            }
+            matriz.add(mat);
+        }
+        Floyd ventana = new Floyd(matriz, this);
+        matriz.clear();
+        ventana.setVisible(true);
+    }
+    public void primDatos(){
+        int tamaño = nodos.size();
+        for (int i = 0; i < tamaño; i++){
+            Matriz mat = new Matriz();
+            mat.setNodo(i);//Nodo
+            for(int k=0;k<lineas.size();k++){
+                if(lineas.get(k).getX1()==nodos.get(i).getX() && lineas.get(k).getY1()==nodos.get(i).getY()){
+                    
+                    for(int j=0;j<tamaño;j++){
+                        if(lineas.get(k).getX2()==nodos.get(j).getX() && lineas.get(k).getY2()==nodos.get(j).getY()){
+                            mat.setNodoAs(j);
+                            mat.setValor(lineas.get(k).getDistancia());
+                        }
+                    }
+                }if(lineas.get(k).getX2()==nodos.get(i).getX() && lineas.get(k).getY2()==nodos.get(i).getY()){
+                    
+                    for(int j=0;j<tamaño;j++){
+                        if(lineas.get(k).getX1()==nodos.get(j).getX() && lineas.get(k).getY1()==nodos.get(j).getY()){
+                            mat.setNodoAs(j);
+                            if(lineas.get(k).getDirigido()){
+                                mat.setValor(-1);
+                            }else{
+                                mat.setValor(lineas.get(k).getDistancia());
+                            }
+                        }
+                    }
+                }       
+            }
+            matriz.add(mat);
+        }
+        Floyd ventana = new Floyd(matriz, this);
+        matriz.clear();
+        ventana.setVisible(true);
+    }
+    public void kruskalDatos(){
+        
     }
     //==========================================================================
 }
