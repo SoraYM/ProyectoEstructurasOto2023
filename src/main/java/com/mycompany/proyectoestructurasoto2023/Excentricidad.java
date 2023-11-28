@@ -3,7 +3,11 @@ import java.awt.Color;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
-public class BuscaNivel extends JFrame {
+/**
+ *
+ * @author yesu7
+ */
+public class Excentricidad extends JFrame {
     private JTextArea textoMatriz;
     private JScrollPane scrollpanel;
     private JComboBox comboBox1, comboBox2;
@@ -13,7 +17,7 @@ public class BuscaNivel extends JFrame {
     private final  ArrayList<Matriz> matriz;
     private final PanelMapa mapa;
     private static final int I = 99999;private static int n;
-    BuscaNivel(ArrayList<Matriz> matriz, PanelMapa mapa){
+    Excentricidad(ArrayList<Matriz> matriz, PanelMapa mapa){
         this.matriz = new ArrayList<Matriz>(matriz);
         this.mapa = mapa;
         n = matriz.size();
@@ -55,7 +59,7 @@ public class BuscaNivel extends JFrame {
                 if (seleccion1 == seleccion2) {
                     JOptionPane.showMessageDialog(null,"¡No puedes seleccionar números iguales!");
                 } else {
-                    algoritmoBPA(seleccion1, seleccion2);
+                    algoritmoExentricidad(seleccion1, seleccion2);
                 }
             }
         });
@@ -65,7 +69,7 @@ public class BuscaNivel extends JFrame {
         panel.add(comboBox1);
         panel.add(comboBox2);
     }
-    private void algoritmoBPA(int origen, int destino){
+    private void algoritmoExentricidad(int origen, int destino){
         
     }
     //--------------------------------------------------------------------------

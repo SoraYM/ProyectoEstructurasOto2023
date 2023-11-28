@@ -1,5 +1,5 @@
 package com.mycompany.proyectoestructurasoto2023;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
@@ -7,7 +7,7 @@ import javax.swing.*;
  *
  * @author yesu7
  */
-public class Floyd extends JFrame {
+public class Floyd extends JFrame {//recordar que esta en modo larios
     private JTextArea textoMatriz;
     private JScrollPane scrollpanel;
     private JComboBox comboBox1, comboBox2;
@@ -15,7 +15,7 @@ public class Floyd extends JFrame {
     private int seleccion1, seleccion2;
     private JPanel panel;
     private final  ArrayList<Matriz> matriz;
-    private PanelMapa mapa;
+    private final PanelMapa mapa;
     private static final int I = 99999;private static int n;
     Floyd(ArrayList<Matriz> matriz, PanelMapa mapa){
         this.matriz = new ArrayList<Matriz>(matriz);
@@ -58,8 +58,9 @@ public class Floyd extends JFrame {
                 if (seleccion1 == seleccion2) {
                     JOptionPane.showMessageDialog(null,"¡No puedes seleccionar números iguales!");
                 } else {
-                    algoritmoFloyd(seleccion1, seleccion2);
+                    //algoritmoFloyd(seleccion1, seleccion2);
                     algoritmoLarios(seleccion1, seleccion2);
+                    
                 }
             }
         });
@@ -102,7 +103,7 @@ public class Floyd extends JFrame {
 		for (i = 0; i < n; i++) {
                     if (dist[i][k] + dist[k][j] < dist[i][j]) {
 			dist[i][j] = dist[i][k] + dist[k][j];
-			predMatrix[i][j] = predMatrix[i][k];
+			predMatrix[i][j] = predMatrix[i][k];//warshall
                     }
 		}
             }
@@ -110,6 +111,8 @@ public class Floyd extends JFrame {
         long endTime = System.nanoTime(); // Registro del tiempo final
         long executionTime = endTime - startTime; // Cálculo del tiempo de ejecución en milisegundos
         System.out.println("Tiempo de ejecución del algoritmo Floyd: " + executionTime + " ns");
+        imprimirEspecifico(origen, destino, dist, predMatrix);
+        imprimirResultado(dist, predMatrix);
     }
     private void algoritmoLarios(int origen, int destino){
         long startTime = System.nanoTime(); // Registro del tiempo inicial
@@ -153,23 +156,23 @@ public class Floyd extends JFrame {
         long executionTime = endTime - startTime; // Cálculo del tiempo de ejecución en milisegundos
         System.out.println("Tiempo de ejecución del algoritmo Larios: " + executionTime + " ns");
         imprimirEspecifico(origen, destino, dist, predMatrix);
+        imprimirResultado(dist, predMatrix);
     }
     //--------------------------------------------------------------------------
     private void imprimirResultado(int[][] dist, int[][] pred) {
-        textoMatriz.append("\n");
+        textoMatriz.append("Floyd\n");
+        for (int i = 0; i < dist.length; i++) {
+            for (int j = 0; j < dist.length; j++) {
+                textoMatriz.append(""+dist[i][j]+"\t");
+            }
+            textoMatriz.append("\n");
+        }
+        textoMatriz.append("Warshall\n");
         for (int i = 0; i < pred.length; i++) {
             for (int j = 0; j < pred.length; j++) {
-                if (i != j) {
-                    int u = i + 1;
-                    int v = j + 1;
-                    String path = String.format("%d -> %d    %2d     %s", u, v, (int) dist[i][j], u);
-                    do {
-                        u = pred[u - 1][v - 1];
-                        path += " -> " + u;
-                    } while (u != v);
-                    textoMatriz.append(path+"\n");
-                }
+                textoMatriz.append(""+pred[i][j]+"\t");
             }
+            textoMatriz.append("\n");
         }
     }
     private void imprimirEspecifico(int origen, int destino, int[][] dist, int[][] predMatrix){
@@ -184,6 +187,7 @@ public class Floyd extends JFrame {
         } while (u != v);
         textoMatriz.append(path+"\n");
         mapa.repaint();
+        
     }
     private int distanciaAB(int a, int b){
         int valor;

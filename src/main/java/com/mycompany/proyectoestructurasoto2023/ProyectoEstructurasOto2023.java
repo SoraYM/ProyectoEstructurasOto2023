@@ -1,9 +1,6 @@
 package com.mycompany.proyectoestructurasoto2023;
-import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 import javax.swing.*;
-
 /**
  *
  * @author yesu7
@@ -69,73 +66,96 @@ public class ProyectoEstructurasOto2023 extends JFrame{
         panel.add(barraMenu);
         barraMenu.add(archivo);
             archivo.add(abrir);
-            abrir.addActionListener(new ActionListener(){
-                @Override
-                public void actionPerformed(ActionEvent e){
-                    panel.cargarGrafo();
-                }  
-            });
+                abrir.addActionListener(new ActionListener(){
+                    @Override
+                        public void actionPerformed(ActionEvent e){
+                        panel.cargarGrafo();
+                    }  
+                });
             archivo.add(guardar);
-            guardar.addActionListener(new ActionListener(){
-                @Override
-                public void actionPerformed(ActionEvent e){
-                    panel.guardarGrafo();
-                }  
-            });
+                guardar.addActionListener(new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        panel.guardarGrafo();
+                    }  
+                });
             archivo.add(cerrar);
-            cerrar.addActionListener(new ActionListener(){
-                @Override
-                public void actionPerformed(ActionEvent e){
-                    panel.cerrarGrafo();
-                }  
-            });
+                cerrar.addActionListener(new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        panel.cerrarGrafo();
+                    }  
+                });
         barraMenu.add(ligas);
             ligas.add(ligarNodos);
-            ligarNodos.addActionListener(new ActionListener(){//metodo crear lineas en menu con botones
-                @Override
-                public void actionPerformed(ActionEvent e){
-                    try{
-                        int n1 = Integer.parseInt(JOptionPane.showInputDialog("Nodo Inicio"));
-                        int n2 = Integer.parseInt(JOptionPane.showInputDialog("Nodo final"));
-                        JOptionPane.showMessageDialog(null,"Desde el nodo <<" + n1 +">> al nodo <<"+ n2 + ">>");
-                        n1--;n2--;
-                        panel.creaLiga(n1, n2);
-                    }catch(java.lang.NumberFormatException ex){}
-                }    
-            });        
+                ligarNodos.addActionListener(new ActionListener(){//metodo crear lineas en menu con botones
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        try{
+                            int n1 = Integer.parseInt(JOptionPane.showInputDialog("Nodo Inicio"));
+                            int n2 = Integer.parseInt(JOptionPane.showInputDialog("Nodo final"));
+                            JOptionPane.showMessageDialog(null,"Desde el nodo <<" + n1 +">> al nodo <<"+ n2 + ">>");
+                            n1--;n2--;
+                            panel.creaLiga(n1, n2);
+                        }catch(java.lang.NumberFormatException ex){}
+                    }
+                });        
         barraMenu.add(gDirigidos);
             gDirigidos.add(algoDijk);
-            algoDijk.addActionListener(new ActionListener(){
-                @Override
-                public void actionPerformed(ActionEvent e){
-                    panel.dijkstraDatos();
-                }
-            });
+                algoDijk.addActionListener(new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        panel.dijkstraDatos();
+                    }
+                });
             gDirigidos.add(algoFloyd);      
-            algoFloyd.addActionListener(new ActionListener(){
-                @Override
-                public void actionPerformed(ActionEvent e){
-                    panel.floydDatos();
-                }
-            });
+                algoFloyd.addActionListener(new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        panel.floydDatos();
+                    }
+                });
         barraMenu.add(gNoDirigidos);
             gNoDirigidos.add(algoKrusk);
-            gNoDirigidos.add(algoPrim);        
+                algoKrusk.addActionListener(new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        //
+                    }
+                });
+            gNoDirigidos.add(algoPrim);
+                algoPrim.addActionListener(new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        panel.primDatos();
+                    }
+                });
         barraMenu.add(arboles);
             arboles.add(bNivel);
-            arboles.add(bProfundidad);        
+                bNivel.addActionListener(new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        //
+                    }
+                });
+            arboles.add(bProfundidad);    
+                bProfundidad.addActionListener(new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        //
+                    }
+                });
         barraMenu.add(tablaHash);
             tablaHash.add(recolector);
         barraMenu.add(matriz);
             matriz.add(mostrarMatriz);
-            mostrarMatriz.addActionListener(new ActionListener(){
-                @Override
-                public void actionPerformed(ActionEvent e){
-                    panel.Matrix();
-                }
-            });
+                mostrarMatriz.addActionListener(new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        panel.Matrix();
+                    }
+                });
     }
-        
     public static void main (String[]args){
         ProyectoEstructurasOto2023 fr = new ProyectoEstructurasOto2023();
 	fr.setVisible(true);

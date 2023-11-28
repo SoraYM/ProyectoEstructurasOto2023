@@ -14,12 +14,11 @@ public class Dijkstra extends JFrame {
     private int seleccion1, seleccion2;
     private JPanel panel;
     private final ArrayList<Matriz> matriz;
-    private PanelMapa mapa;
+    private final PanelMapa mapa;
     private static final int I = 99999; private static int n;
     private int[] dist;
     private boolean[] visi;
-    private int[] predecessors;
-
+    private int[] predecesores;
     Dijkstra(ArrayList<Matriz> matriz, PanelMapa mapa) {
         this.matriz = new ArrayList<>(matriz);
         this.mapa = mapa;
@@ -31,7 +30,7 @@ public class Dijkstra extends JFrame {
         textoMatriz.setText("Par     Dist    Camino\n");
         dist = new int[n];
         visi = new boolean[n];
-        predecessors = new int[n];
+        predecesores = new int[n];
     }
     private void iniciarComponentes() {
         panel = new JPanel();
@@ -66,8 +65,12 @@ public class Dijkstra extends JFrame {
                 if (seleccion1 == seleccion2) {
                     JOptionPane.showMessageDialog(null, "¡No puedes seleccionar números iguales!");
                 } else {
-                    algoritmoDijkstra(seleccion1);int distanciaMinima = dist[seleccion2];List<Integer> caminoMasCorto = obtenerCamino(seleccion1, seleccion2);
-                    imprimirEspecifico(seleccion1, seleccion2, distanciaMinima, caminoMasCorto);
+                    algoritmoDijkstra(seleccion1);
+                    int distanciaMinima = dist[seleccion2];
+                    List<Integer> caminoMasCorto = obtenerCamino(seleccion1, seleccion2);
+                        imprimirEspecifico(seleccion1, seleccion2, distanciaMinima, caminoMasCorto);
+                        textoMatriz.append("Resultado:");
+                        textoMatriz.append(Arrays.toString(dist));
                     //imprimirResultado(dist);
                 }
             }
@@ -101,7 +104,7 @@ public class Dijkstra extends JFrame {
 
         Arrays.fill(dist, I);
         Arrays.fill(visi, false);
-        Arrays.fill(predecessors, -1);
+        Arrays.fill(predecesores, -1);
         dist[source] = 0;
 
         for (int count = 0; count < n - 1; count++) {
@@ -111,7 +114,7 @@ public class Dijkstra extends JFrame {
             for (int v = 0; v < n; v++) {
                 if (!visi[v] && grafo[u][v] != I && dist[u] != I && dist[u] + grafo[u][v] < dist[v]) {
                     dist[v] = dist[u] + grafo[u][v];
-                    predecessors[v] = u;
+                    predecesores[v] = u;
                 }
             }
         }
@@ -119,7 +122,7 @@ public class Dijkstra extends JFrame {
         long executionTime = endTime - startTime; // Cálculo del tiempo de ejecución en milisegundos
         System.out.println("Tiempo de ejecución del algoritmo Dijkstra: " + executionTime + " ns");
     }
-    
+    //--------------------------------------------------------------------------
     private void imprimirResultado(int[] dist) {
         textoMatriz.append("\n");
         for (int i = 0; i < dist.length; i++) {
@@ -149,7 +152,7 @@ public class Dijkstra extends JFrame {
             path += " -> " + u;
         }
         textoMatriz.append(path+"\n");
-        repaint();
+        mapa.repaint();
     }
     private List<Integer> obtenerCamino(int source, int destination) {
         List<Integer> path = new ArrayList<>();
@@ -157,7 +160,7 @@ public class Dijkstra extends JFrame {
         
         while (current != source) {
             path.add(current);
-            current = predecessors[current];
+            current = predecesores[current];
         }
 
         path.add(source);

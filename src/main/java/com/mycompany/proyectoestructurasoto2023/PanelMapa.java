@@ -5,7 +5,10 @@ import java.awt.event.*;
 import static java.lang.Math.*;
 import java.util.*;
 import java.io.*;
-        
+/**
+ *
+ * @author yesu7
+ */
 public class PanelMapa extends JPanel{
     private int x, y, x2, y2;
     private boolean dirigido = false;//empieza no dirigido
@@ -31,25 +34,25 @@ public class PanelMapa extends JPanel{
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyChar()=='n'){//poner nodos
-                    System.out.println("tecla n presionada");
+                    System.out.println("tecla n presionada (nodos)");
                     estado=1;
                 }
                 if (e.getKeyChar()=='l'){//ligar nodos
-                    System.out.println("tecla l presionada");
+                    System.out.println("tecla l presionada (no dirigido)");
                     estado=2;
                     dirigido = false;
                 }
                 if (e.getKeyChar()=='d'){//ligar dirigido
-                    System.out.println("tecla d presionada");
+                    System.out.println("tecla d presionada (dirigido)");
                     estado=2;
                     dirigido = true;
                 }
                 if (e.getKeyChar()=='m'){//mover nodos 
-                    System.out.println("tecla m presionada");
+                    System.out.println("tecla m presionada (mover)");
                     estado=3;
                 }
                 if (e.getKeyChar()=='p'){//distancias propias 
-                    System.out.println("tecla p presionada");
+                    System.out.println("tecla p presionada (dist propias)");
                     distPersonalizadas = !(distPersonalizadas);
                 }
             }
@@ -183,7 +186,6 @@ public class PanelMapa extends JPanel{
                     }
                 }if(pintar){
                     g.setColor(Color.RED);
-                    
                     g.drawLine(x1,y1,x22,y22);
                 }else{
                     g.setColor(Color.BLACK);
@@ -395,6 +397,40 @@ public class PanelMapa extends JPanel{
         matriz.clear();
         ventana.setVisible(true);
     }
+    public void primDatos(){
+        int tamaño = nodos.size();
+        for (int i = 0; i < tamaño; i++){
+            Matriz mat = new Matriz();
+            mat.setNodo(i);//Nodo
+            for(int k=0;k<lineas.size();k++){
+                if(lineas.get(k).getX1()==nodos.get(i).getX() && lineas.get(k).getY1()==nodos.get(i).getY()){
+                    
+                    for(int j=0;j<tamaño;j++){
+                        if(lineas.get(k).getX2()==nodos.get(j).getX() && lineas.get(k).getY2()==nodos.get(j).getY()){
+                            mat.setNodoAs(j);
+                            mat.setValor(lineas.get(k).getDistancia());
+                        }
+                    }
+                }if(lineas.get(k).getX2()==nodos.get(i).getX() && lineas.get(k).getY2()==nodos.get(i).getY()){
+                    
+                    for(int j=0;j<tamaño;j++){
+                        if(lineas.get(k).getX1()==nodos.get(j).getX() && lineas.get(k).getY1()==nodos.get(j).getY()){
+                            mat.setNodoAs(j);
+                            if(lineas.get(k).getDirigido()){
+                                mat.setValor(-1);
+                            }else{
+                                mat.setValor(lineas.get(k).getDistancia());
+                            }
+                        }
+                    }
+                }       
+            }
+            matriz.add(mat);
+        }
+        Prim ventana = new Prim(matriz, this);
+        matriz.clear();
+        ventana.setVisible(true);
+    }
     public void exentricidadDatos(){
         int tamaño = nodos.size();
         for (int i = 0; i < tamaño; i++){
@@ -497,42 +533,6 @@ public class PanelMapa extends JPanel{
         matriz.clear();
         ventana.setVisible(true);
     }
-    public void primDatos(){
-        int tamaño = nodos.size();
-        for (int i = 0; i < tamaño; i++){
-            Matriz mat = new Matriz();
-            mat.setNodo(i);//Nodo
-            for(int k=0;k<lineas.size();k++){
-                if(lineas.get(k).getX1()==nodos.get(i).getX() && lineas.get(k).getY1()==nodos.get(i).getY()){
-                    
-                    for(int j=0;j<tamaño;j++){
-                        if(lineas.get(k).getX2()==nodos.get(j).getX() && lineas.get(k).getY2()==nodos.get(j).getY()){
-                            mat.setNodoAs(j);
-                            mat.setValor(lineas.get(k).getDistancia());
-                        }
-                    }
-                }if(lineas.get(k).getX2()==nodos.get(i).getX() && lineas.get(k).getY2()==nodos.get(i).getY()){
-                    
-                    for(int j=0;j<tamaño;j++){
-                        if(lineas.get(k).getX1()==nodos.get(j).getX() && lineas.get(k).getY1()==nodos.get(j).getY()){
-                            mat.setNodoAs(j);
-                            if(lineas.get(k).getDirigido()){
-                                mat.setValor(-1);
-                            }else{
-                                mat.setValor(lineas.get(k).getDistancia());
-                            }
-                        }
-                    }
-                }       
-            }
-            matriz.add(mat);
-        }
-        Floyd ventana = new Floyd(matriz, this);
-        matriz.clear();
-        ventana.setVisible(true);
-    }
-    public void kruskalDatos(){
-        
-    }
+    public void kruskalDatos(){}
     //==========================================================================
 }
