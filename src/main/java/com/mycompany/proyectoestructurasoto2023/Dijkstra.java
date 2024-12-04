@@ -68,10 +68,12 @@ public class Dijkstra extends JFrame {
                     algoritmoDijkstra(seleccion1);
                     int distanciaMinima = dist[seleccion2];
                     List<Integer> caminoMasCorto = obtenerCamino(seleccion1, seleccion2);
-                        imprimirEspecifico(seleccion1, seleccion2, distanciaMinima, caminoMasCorto);
-                        textoMatriz.append("Resultado:");
-                        textoMatriz.append(Arrays.toString(dist));
+                    imprimirEspecifico(seleccion1, seleccion2, distanciaMinima, caminoMasCorto);
+                    textoMatriz.append("Resultado: ");
+                    textoMatriz.append(Arrays.toString(dist)+"\n");
                     //imprimirResultado(dist);
+                    
+                    textoMatriz.append("\n");
                 }
             }
         });
@@ -152,6 +154,7 @@ public class Dijkstra extends JFrame {
             path += " -> " + u;
         }
         textoMatriz.append(path+"\n");
+        System.out.println(mapa.camino.toString());
         mapa.repaint();
     }
     private List<Integer> obtenerCamino(int source, int destination) {

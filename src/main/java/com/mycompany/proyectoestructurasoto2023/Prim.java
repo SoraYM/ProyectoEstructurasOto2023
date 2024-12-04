@@ -122,6 +122,7 @@ public class Prim extends JFrame {
                     mapa.camino.add(resultado[i].padre);
                 }
             }
+            System.out.println(mapa.camino.toString());
             mapa.repaint();
             textoMatriz.append("Coste min total = " + total_coste_min+"\n");
     }

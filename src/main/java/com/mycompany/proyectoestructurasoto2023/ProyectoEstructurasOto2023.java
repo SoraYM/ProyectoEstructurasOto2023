@@ -120,6 +120,7 @@ public class ProyectoEstructurasOto2023 extends JFrame{
                 algoKrusk.addActionListener(new ActionListener(){
                     @Override
                     public void actionPerformed(ActionEvent e){
+                        panel.bpaDatos();
                         //
                     }
                 });
@@ -135,6 +136,7 @@ public class ProyectoEstructurasOto2023 extends JFrame{
                 bNivel.addActionListener(new ActionListener(){
                     @Override
                     public void actionPerformed(ActionEvent e){
+                        panel.bpaDatos();
                         //
                     }
                 });
@@ -142,6 +144,7 @@ public class ProyectoEstructurasOto2023 extends JFrame{
                 bProfundidad.addActionListener(new ActionListener(){
                     @Override
                     public void actionPerformed(ActionEvent e){
+                        panel.bppDatos();
                         //
                     }
                 });

@@ -164,9 +164,9 @@ public class PanelMapa extends JPanel{
         super.paintComponent(g);
         //imagen----------------------------------------------------------------
         
-        Image img;
-        img = new ImageIcon(getClass().getResource("/images/mapa.jpeg")).getImage();
-        g.drawImage(img, 0, 0, getWidth(), getHeight(), null);
+        //Image img;
+        //img = new ImageIcon(getClass().getResource("/images/mapa.jpeg")).getImage();
+        //g.drawImage(img, 0, 0, getWidth(), getHeight(), null);
         
         //for de lineas y nodos-------------------------------------------------
         for(int i=0; i<lineas.size(); i++){//lineas
@@ -495,7 +495,7 @@ public class PanelMapa extends JPanel{
             }
             matriz.add(mat);
         }
-        Floyd ventana = new Floyd(matriz, this);
+        BuscaProf ventana = new BuscaProf(matriz, this);
         matriz.clear();
         ventana.setVisible(true);
     }
@@ -529,7 +529,7 @@ public class PanelMapa extends JPanel{
             }
             matriz.add(mat);
         }
-        Floyd ventana = new Floyd(matriz, this);
+        BuscaNivel ventana = new BuscaNivel(matriz, this);
         matriz.clear();
         ventana.setVisible(true);
     }
